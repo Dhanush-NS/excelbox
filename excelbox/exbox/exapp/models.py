@@ -30,7 +30,7 @@ class Totalsolutions(models.Model):
 
 class Item(models.Model):
     sl_no = models.IntegerField()
-    application = models.CharField(max_length=255)
+    application = models.CharField(max_length=245)
     categories = models.CharField(max_length=255)
     product_name = models.CharField(max_length=255)
     make = models.CharField(max_length=255)

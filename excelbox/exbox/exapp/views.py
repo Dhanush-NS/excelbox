@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Totalsolutions
+from .forms import ItemForm
 
 @login_required
 def home(request):
@@ -38,6 +39,15 @@ def totalsolutions(request):
 
 
 def additem(request):
-    # if request.method == "POST":
-      
-    return render(request, "additem.html", {})
+    if request.method == "POST":
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the form data to the database
+            return redirect('success')  # Redirect to a success page or another view
+    else:
+        form = ItemForm()
+
+    return render(request, "additem.html", {"form": form})
+
+def success(request):
+    return render(request, "success.html")

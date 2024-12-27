@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import authView, home , totalsolutions , additem
+from .views import authView, home , totalsolutions , additem,success
 
 
 urlpatterns = [
@@ -8,6 +8,7 @@ urlpatterns = [
  path("totalsales/",totalsolutions, name="totalsolutions"),
  path("additem/",additem, name="additem"),
  path("accounts/", include("django.contrib.auth.urls")),
+ path('success/', success, name='success'),
  
  
 ]
