@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     
@@ -23,7 +23,8 @@
             padding: 0;
         }
         .container {
-            width: 95%;
+            width: 100%;
+            max-width: 1400px; 
             margin: 20px auto;
             padding: 20px;
             background-color: #ffffff;
@@ -68,15 +69,17 @@
         }
         table {
             width: 100%;
+            max-width: 1400px;
             border-collapse: collapse;
             border-radius: 8px;
             overflow: hidden;
             margin-top: 20px;
         }
         th, td {
-            padding: 12px;
+            padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            /* font-size: 1.1rem; */
         }
         th {
             background-color: #007bff;
@@ -88,25 +91,32 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+        .custom-space {
+            margin-left: 20px; /* Adjust as needed */
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <!-- Search bar and Sorting dropdown -->
-            <input type="text" class="search-bar" placeholder="Search...">
+            <input type="text" class="search-bar" placeholder="Search..." value="{{ search_query }}">
+
+
             
             <!-- Dropdown Trigger with Arrow -->
              <div>
             <select class="dropdown">
-                <option value="all">All Categories</option>
-                <option value="hardware">Hardware</option>
-                <option value="software">Software</option>
-                <option value="service">Service</option>
+                <option value="all" {% if category_filter == 'all' %}selected{% endif %}>All Categories</option>
+                <option value="hardware" {% if category_filter == 'hardware' %}selected{% endif %}>Hardware</option>
+                <option value="software" {% if category_filter == 'software' %}selected{% endif %}>Software</option>
+                <option value="service" {% if category_filter == 'service' %}selected{% endif %}>Service</option>
             </select>
             </div>
 
             <a class="btn btn-success ml-2" href="{% url 'exapp:additem' %}">Add Item</a>
+            <a class="btn btn-success ml-3 custom-space" >Upload</a>
         </div>
 
         <div class="table-container ">
@@ -137,7 +147,7 @@
                   {% for obj in objs %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        <td>{{obj.product_name}}</td>
+                        <td>{{obj.application}}</td>
                         <td>{{obj.category}}</td>
                         <td>{{obj.product_name}}</td>
                         <td>{{obj.make}}</td>
@@ -187,6 +197,47 @@
                 alert("Item with ID: " + id + " has been deleted.");
             }
         }
+
+        document.querySelector('.dropdown').addEventListener('change', function() {
+        let selectedCategory = this.value; // Get the selected category value
+        
+        // You can either filter the table data here or send it to the server for backend filtering
+        
+        filterDataByCategory(selectedCategory);
+    });
+
+    function filterDataByCategory(category) {
+        // This can be a client-side table filter or send an AJAX request to the backend.
+        // Here we will reload the page with the selected category as a URL parameter to trigger backend filtering
+
+        window.location.href = "{% url 'exapp:totalsolutions' %}?category=" + category;  // Make sure to use your actual view name in the URL
+    }
+
+    let debounceTimer;
+    document.querySelector('.search-bar').addEventListener('input', function() {
+        let searchQuery = this.value; // Get the search query value
+
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(function() {
+        // Trigger backend filtering by updating the URL with the search query
+        filterDataBySearch(searchQuery);
+    }, 500);  // Adjust the delay (in ms) if necessary
+
+
+        // Trigger backend filtering by updating the URL with the search query
+        filterDataBySearch(searchQuery);
+    });
+
+    function filterDataBySearch(query) {
+        // This reloads the page with the search query as a URL parameter
+        window.location.href = "{% url 'exapp:totalsolutions' %}?search=" + query + "&category=" + getSelectedCategory(); 
+    }
+
+    // Helper function to get the selected category
+    function getSelectedCategory() {
+        return document.querySelector('.dropdown').value;
+    }
     </script>
 
     {% block content %}{% endblock %}

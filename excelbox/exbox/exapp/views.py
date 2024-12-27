@@ -19,6 +19,7 @@ def authView(request):
  return render(request, "registration/signup.html", {"form": form})
 
 def totalsolutions(request):
+
     # Get search query parameters
     search_query = request.GET.get('search', '')
     category_filter = request.GET.get('category', 'all')
@@ -32,11 +33,11 @@ def totalsolutions(request):
     if category_filter != 'all':
         products = products.filter(category=category_filter)
     
-    context = {
-        'products': products
-    }
-    return render(request, 'totalsolutions.html', context)
+    objs = Totalsolutions.objects.all()
+    return render(request, 'totalsolutions.html', {'objs': products, 'category_filter': category_filter, 'search_query': search_query})
 
 
 def additem(request):
- return render(request, "additem.html", {})
+    # if request.method == "POST":
+      
+    return render(request, "additem.html", {})
