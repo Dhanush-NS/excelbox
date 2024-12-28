@@ -7,5 +7,5 @@ urlpatterns = [
     path("totalsales/", totalsolutions, name="totalsolutions"),
     path("additem/", additem, name="additem"),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("success/", success, name="success"),
+    path("success/", success, name="success"), 
 ]
