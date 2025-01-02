@@ -8,7 +8,8 @@ from .models import Totalsolutions,Item
 def home(request):
  return render(request, "home.html", {})
 
-
+def edit_view(request):
+   return render(request, "edit.html")
 def authView(request):
  if request.method == "POST":
   form = UserCreationForm(request.POST or None)
