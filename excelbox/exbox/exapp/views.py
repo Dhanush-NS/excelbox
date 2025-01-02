@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Totalsolutions
-from .forms import ItemForm
+from .models import Totalsolutions,Item
+# from .forms import ItemForm
 
 @login_required
 def home(request):
@@ -37,17 +37,56 @@ def totalsolutions(request):
     objs = Totalsolutions.objects.all()
     return render(request, 'totalsolutions.html', {'objs': products, 'category_filter': category_filter, 'search_query': search_query})
 
+def success(request):
+   return render(request,"success.html")
 
 def additem(request):
     if request.method == "POST":
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            form.save()  # Save the form data to the database
-            return redirect('success')  # Redirect to a success page or another view
-    else:
-        form = ItemForm()
+        print(request.POST)
+        # Extract data from POST request
+        sl_no = request.POST.get("sl_no")
+        application = request.POST.get("application")
+        categories = request.POST.get("categories")
+        product_name = request.POST.get("product_name")
+        make = request.POST.get("make")
+        model = request.POST.get("model")
+        specification = request.POST.get("specification")
+        uom = request.POST.get("uom")
+        buying_price = request.POST.get("buying_price")
+        vendor = request.POST.get("vendor")
+        quotation_received_date = request.POST.get("quotation_received_date")
+        lead_time = request.POST.get("lead_time")
+        remarks = request.POST.get("remarks")
+        list_price = request.POST.get("list_price")
+        discount = request.POST.get("discount")
+        sales_price = request.POST.get("sales_price")
+        sales_margin = request.POST.get("sales_margin")
 
-    return render(request, "additem.html", {"form": form})
+        # Create and save an Item instance
+        item = Item(
+            sl_no=sl_no,
+            application=application,
+            categories=categories,
+            product_name=product_name,
+            make=make,
+            model=model,
+            specification=specification,
+            uom=uom,
+            buying_price=buying_price,
+            vendor=vendor,
+            quotation_received_date=quotation_received_date,
+            lead_time=lead_time,
+            remarks=remarks,
+            list_price=list_price,
+            discount=discount,
+            sales_price=sales_price,
+            sales_margin=sales_margin
+        )
+        item.save()
+        
+        return redirect('success')  # Redirect to a success page or another view
+    # else:
+        # form = ItemForm()
 
-def success(request):
-    return render(request, "success.html")
+    return render(request, "additem.html")
+
