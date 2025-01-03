@@ -9,7 +9,11 @@ def home(request):
  return render(request, "home.html", {})
 
 def edit_view(request):
+   if request.method == "POST":
+      new_username = request.POST.get('username')
+      
    return render(request, "edit.html")
+
 def authView(request):
  if request.method == "POST":
   form = UserCreationForm(request.POST or None)
