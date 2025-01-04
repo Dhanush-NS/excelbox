@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Totalsolutions,Item
+from django.contrib.auth.models import auth, User
+from django.contrib import messages
+
+
 # from .forms import ItemForm
 
 @login_required
@@ -9,10 +13,19 @@ def home(request):
  return render(request, "home.html", {})
 
 def edit_view(request):
-   if request.method == "POST":
-      new_username = request.POST.get('username')
-      
-   return render(request, "edit.html")
+    if request.method == "POST":
+        new_username = request.POST.get('username')
+        if User.objects.filter(username=new_username).exists():
+                messages.error(request, "Username already exists, choose another")
+                return redirect('edit')
+
+        else:
+            # Update the current user's username
+            user = request.user 
+            user.username = new_username
+            user.save()
+        return redirect('edit')
+    return render(request, "edit.html")
 
 def authView(request):
  if request.method == "POST":
