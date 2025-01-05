@@ -99,7 +99,7 @@
     {% block content %}
     <div class="login-container">
         <h1>Edit Details</h1>
-        <form action="{% url 'edit' %}" method="POST">
+        <form action="{% url 'exapp:edit' %}" method="POST">
             {% csrf_token %}
             <label for="edit_username">Username:</label>
             <input type="text" id="edit_username" name="edit_username" value="{{ user.username }}" minlength="5" maxlength="7" required><br><br>
