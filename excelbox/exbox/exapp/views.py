@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from .models import Totalsolutions,Item
 from django.contrib.auth.models import auth, User
 from django.contrib import messages
@@ -37,6 +38,8 @@ def authView(request):
   form = UserCreationForm()
  return render(request, "registration/signup.html", {"form": form})
 
+@login_required
+@never_cache
 def totalsolutions(request):
 
     # Get search query parameters
@@ -58,6 +61,8 @@ def totalsolutions(request):
 def success(request):
    return render(request,"success.html")
 
+@login_required
+@never_cache
 def additem(request):
     if request.method == "POST":
         print(request.POST)
