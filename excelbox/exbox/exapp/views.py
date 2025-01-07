@@ -13,6 +13,7 @@ from django.contrib import messages
 def home(request):
  return render(request, "home.html", {})
 
+@login_required
 def edit_view(request):
     if request.method == "POST":
         new_username = request.POST.get('username')
